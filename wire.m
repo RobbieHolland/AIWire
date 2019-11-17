@@ -18,12 +18,12 @@ spline_fn = spline(x,y);
 spline_dev= fnder(spline_fn,1);
 
 yy = ppval(spline_fn,xx); 
-grad_points = ppval(spline_dev,xx); 
+g_yy = ppval(spline_dev,xx); 
 
 yy = yy + size_f(2) / 2;
 
-g_yy = abs(atan(gradient(yy)));
-g_yy = max(g_yy) - g_yy;
+% g_yy = abs(atan(gradient(yy)));
+% g_yy = max(g_yy) - g_yy;
 s = size(g_yy);
 
 simulated = drawFunc(simulated, xx, yy, ones(size(yy)));
