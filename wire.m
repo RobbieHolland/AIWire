@@ -16,6 +16,8 @@ y = randi([-40, 40], size(x));
 xx = 1:0.2:size_f(1);
 yy = spline(x,y,xx);
 
+a = 'Mari&ambra'
+
 yy = yy + size_f(2) / 2;
 
 g_yy = abs(atan(gradient(yy)));
