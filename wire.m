@@ -1,7 +1,8 @@
 %% Load image (to determine dimensions)
 rng(1234)
-im = load('../HASTE_GW_SAG_TR1200_S80_0012/HASTE_GW_SAG_TR1200_S80_0012.mat');
-im = im.imageDicom.image;
+%im = load('../HASTE_GW_SAG_TR1200_S80_0012/HASTE_GW_SAG_TR1200_S80_0012.mat');
+%im = im.imageDicom.image;
+im = zeros(256, 192, 203);
 
 %% Simulated image
 simulated = zeros(size(im(:,:,1)));
@@ -10,7 +11,7 @@ size_f = size(simulated);
 % Define spline points
 point_spacing = 40;
 x = 1:point_spacing:size_f(1);
-y = randi([-40, 40], size(x)); 
+y = randi([-100, 100], size(x)); 
 
 % Interpolate and draw onto simulated image
 xx = 1:0.2:size_f(1);
@@ -21,13 +22,16 @@ yy = ppval(spline_fn,xx);
 g_yy = ppval(spline_dev,xx); 
 
 yy = yy + size_f(2) / 2;
+angle = atan(g_yy);
+[hor, vert] = pol2cart(angle, 1);
 
 % g_yy = abs(atan(gradient(yy)));
 % g_yy = max(g_yy) - g_yy;
 s = size(g_yy);
 
 simulated = drawFunc(simulated, xx, yy, ones(size(yy)));
-gradient_map = drawFunc(zeros(size(im(:,:,1))), xx, yy, g_yy);
+%gradient_map = drawFunc(zeros(size(im(:,:,1))), xx, yy, g_yy);
+gradient_map = drawFunc(zeros(size(im(:,:,1))), xx, yy, (hor+1)/2);
 figure
 imshow(gradient_map, [])
 
