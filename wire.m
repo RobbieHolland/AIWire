@@ -13,9 +13,11 @@ y = randi([-30, 30], size(x));
 
 % Interpolate and draw onto simulated image
 xx = 1:0.2:size_f(1);
-yy = spline(x,y,xx);
+spline_fn = spline(x,y);
+spline_dev= fnder(spline_fn,1);
 
-a = 'Mari&ambra'
+yy = ppval(spline_fn,xx); 
+grad_points = ppval(spline_dev,xx); 
 
 yy = yy + size_f(2) / 2;
 xx = round(xx);
