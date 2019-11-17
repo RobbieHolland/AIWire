@@ -15,6 +15,8 @@ y = randi([-30, 30], size(x));
 xx = 1:0.2:size_f(1);
 yy = spline(x,y,xx);
 
+a = 'Mari&ambra'
+
 yy = yy + size_f(2) / 2;
 xx = round(xx);
 yy = round(yy);
