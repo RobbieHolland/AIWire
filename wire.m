@@ -1,15 +1,18 @@
 %% Load image (to determine dimensions)
 rng(1234)
-%im = load('../HASTE_GW_SAG_TR1200_S80_0012/HASTE_GW_SAG_TR1200_S80_0012.mat');
-%im = im.imageDicom.image;
-im = zeros(256, 192, 203);
+im = load('../HASTE_GW_SAG_TR1200_S80_0012/HASTE_GW_SAG_TR1200_S80_0012.mat');
+im = im.imageDicom.image;
+% im = zeros(256, 192, 203);
 
-%% Simulated image
+%% Generate spline
 im_size = size(im(:,:,1));
 
 % ----------- Define spline points (3D Version) -----------
-pts = gen_spline();
+% [pts, spline_f] = gen_spline();
+[pts, spline_f] = gen_spline_realistic(im_size, 100);
+fnplt(spline_f)
 
+% Gradients
 grads = gradient(pts);
 % Normalise gradient vectors
 for i = 1:size(grads, 2)
@@ -27,20 +30,6 @@ gradient_map = drawFunc(zeros(im_size), pts(2,:), pts(3,:), z_grads);
 subplot(1,2,2)
 imshow(gradient_map,[])
 title('(1 + Gradient)/2 in vertical (z) direction')
-
-% ----------- Define spline points (2D Version) -----------
-% yy = ppval(spline_fn,xx); 
-% g_yy = ppval(spline_dev,xx); 
-
-% yy = yy + size_f(2) / 2;
-% angle = atan(g_yy);
-% [hor, vert] = pol2cart(angle, 1);
-
-% g_yy = abs(atan(gradient(yy)));
-% g_yy = max(g_yy) - g_yy;
-
-% gradient_map = drawFunc(zeros(size(im(:,:,1))), xx, yy, g_yy);
-% gradient_map = drawFunc(zeros(size(im(:,:,1))), xx, yy, (hor+1)/2);
 
 %% Apply 1/r filter
 filter_dim = 500;
@@ -69,5 +58,5 @@ subplot(1,4,3)
 imshow(gradient_map_conved,[])
 title('Convolved with 1/r')
 subplot(1,4,4)
-imshow(noised_gradient_map,[])
+imshow(abs(noised_gradient_map),[])
 title('Complex gaussian noise')
