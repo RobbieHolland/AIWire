@@ -1,8 +1,8 @@
 %% Load image (to determine dimensions)
 rng(1234)
-im = load('../HASTE_GW_SAG_TR1200_S80_0012/HASTE_GW_SAG_TR1200_S80_0012.mat');
-im = im.imageDicom.image;
-% im = zeros(256, 192, 203);
+%im = load('../HASTE_GW_SAG_TR1200_S80_0012/HASTE_GW_SAG_TR1200_S80_0012.mat');
+%im = im.imageDicom.image;
+im = zeros(256, 192, 203);
 
 %% Generate spline
 im_size = size(im(:,:,1));
@@ -42,7 +42,7 @@ filter_r(center(1), center(2)) = 1;
 gradient_map_conved = conv2(gradient_map, filter_r, 'same');
 
 % Add complex noise
-sigma = 0.3;
+sigma = 2;
 complex_guassian = normrnd(0, sigma, im_size) + 1i * normrnd(0, sigma, im_size);
 noised_gradient_map = gradient_map_conved + complex_guassian;
 
