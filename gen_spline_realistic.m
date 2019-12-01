@@ -1,10 +1,9 @@
 function [pts, spline_f] = gen_spline_realistic(im_size, depth)
     % Generate unlooped spline points 
-    ln = 0:0.125:1;
+    ln = 0.25:0.125:1;
     deviation = floor(im_size(2) * 0.05);
     y = im_size(2)/2 + cumsum(randi([-deviation, deviation], size(ln)));
     xyz = [ln * depth; ln * im_size(1); y];
-    size(xyz)
     
     % Add the loop
     a = randi(size(xyz, 2));
