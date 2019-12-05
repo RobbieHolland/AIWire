@@ -7,3 +7,30 @@ im = zeros(256, 192, 203);
 %% Simulate data
 im_size = size(im(:,:,1));
 [ground_truth, simulated] = simulate(1);
+
+%% Plot many examples
+figure
+n = 5;
+
+test = [];
+train = [];
+
+for i = 1:n
+    [ground_truth, noised_gradient_map] = simulate(0);
+    
+    test = horzcat(test, ground_truth);
+    train = horzcat(train, noised_gradient_map);
+end
+size(test)
+
+
+subplot(2,1,1)
+imshow(test, [])
+title({'Wire spline', '(ground truth)'})
+
+subplot(2,1,2)
+imshow(train, [])
+title({'Complex gaussian noise', '(training data)'})
+
+addpath('/Users/Robert/Documents/Kings/Group Project/AIWire/exportfig')
+save_figure('dataset')
