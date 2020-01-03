@@ -19,17 +19,24 @@ function [ground_truth, noised_gradient_map] = simulate(verbose)
     gradient_map = drawFunc(zeros(im_size), pts(2,:), pts(3,:), z_grads);
     
     % Apply 1/r filter
-    filter_dim = 500;
-    scale = 0.5;
-    center = [filter_dim/2, filter_dim/2];
-    [col_index, row_index] = ndgrid(1:filter_dim, 1:filter_dim);
-    filter_r = sqrt(scale ./ ((row_index - center(1)).^2 + (col_index - center(2)).^2));
-    filter_r(center(1), center(2)) = 1;
-
-    gradient_map_conved = conv2(gradient_map, filter_r, 'same');
+%     filter_dim = 500;
+%     scale = 0.5;
+%     center = [filter_dim/2, filter_dim/2];
+%     [col_index, row_index] = ndgrid(1:filter_dim, 1:filter_dim);
+%     filter_r = sqrt(scale ./ ((row_index - center(1)).^2 + (col_index - center(2)).^2));
+%     filter_r(center(1), center(2)) = 1;
+% 
+%     gradient_map_conved = conv2(gradient_map, filter_r, 'same');
+    gradient_map_conved = zeros(size(gradient_map));
+    [radius, ~] = bwdist(gradient_map~=0); %distance between each point and the non zero values
+    gradient_map_conved = 1./radius;
+    gradient_map_conved(gradient_map_conved==inf) = gradient_map(gradient_map~=0);
+    %as distance with oneself was 0, 1/0 = inf, and the signal is strongest
+    %right around it
     
     % Add complex noise
-    sigma = 1;
+    %sigma = 1;
+    sigma = 0.5;
     complex_guassian = normrnd(0, sigma, im_size) + 1i * normrnd(0, sigma, im_size);
     noised_gradient_map = abs(gradient_map_conved + complex_guassian);
     
