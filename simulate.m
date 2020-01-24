@@ -41,7 +41,7 @@ function [thick_ground_truth, undersampled_noised_gradient_map] = simulate(blur,
     undersampled_noised_gradient_map = abs(ktoi(U .* k_space));
     
     % Ground-truth line thickness
-    thick_ground_truth = conv2(ground_truth, ones(thickness))>0;
+    thick_ground_truth = conv2(ground_truth, ones(thickness), "same")>0;
     
     if verbose
        % Show result of filtering + noise
