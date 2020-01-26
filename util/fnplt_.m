@@ -1,4 +1,5 @@
 function [points,t] = fnplt_(f,varargin) 
+npoints = 1000;
 %FNPLT Plot a function. 
 % 
 %   FNPLT(F)  plots the function in F on its basic interval. 
@@ -71,7 +72,7 @@ case 'st'
    else 
       interv = stbrk(f,'interv'); 
    end 
-   npoints = 4001; d = stbrk(f,'dim'); 
+   d = stbrk(f,'dim'); 
    switch fnbrk(f,'var') 
    case 1 
       x = linspace(interv{1}(1),interv{1}(2),npoints); 
@@ -98,7 +99,6 @@ otherwise
       for i=m:-1:3 
          x{i} = (breaks{i}(1)+breaks{i}(end))/2; 
       end 
-      npoints = 4001; 
       ii = [1]; if m>1, ii = [2 1]; end 
       for i=ii 
          x{i}= linspace(breaks{i}(1),breaks{i}(end),npoints); 
@@ -119,7 +119,6 @@ otherwise
          end 
       end 
    else     % we are dealing with a univariate spline 
-      npoints = 4001; 
       x = [breaks(2:l) linspace(breaks(1),breaks(l+1),npoints)]; 
       v = ppual(f,x);  
       if l>1 % make sure of proper treatment at jumps if so required 
