@@ -6,10 +6,23 @@ import torch.nn as nn
 def double_conv(in_channels, out_channels):
     return nn.Sequential(
         nn.Conv2d(in_channels, out_channels, 3, padding=1),
+        nn.BatchNorm2d(out_channels),
         nn.ReLU(inplace=True),
         nn.Conv2d(out_channels, out_channels, 3, padding=1),
+        nn.BatchNorm2d(out_channels),
         nn.ReLU(inplace=True)
         )
+
+def dice_loss(pred, target, smooth = 1.):
+
+    pred = pred.contiguous()
+    target = target.contiguous()
+
+    intersection = (pred * target).sum(dim=2).sum(dim=2)
+
+    loss = (1 - ((2. * intersection + smooth) / (pred.sum(dim=2).sum(dim=2) + target.sum(dim=2).sum(dim=2) + smooth)))
+
+    return loss.mean()
 
 class UNet(nn.Module):
 
@@ -31,7 +44,6 @@ class UNet(nn.Module):
         self.dconv_up1 = double_conv(64 + 32, 32)
 
         self.conv_last = nn.Conv2d(32, n_class, 1)
-
 
     def forward(self, x):
 
@@ -69,6 +81,7 @@ class UNet(nn.Module):
 
         x = self.dconv_up1(x)
 
-        out = self.conv_last(x)
+        x = self.conv_last(x)
+        out = nn.Sigmoid()(x)
 
         return out
