@@ -1,9 +1,5 @@
-function [thick_ground_truth, undersampled_noised_gradient_map] = simulate(blur, thickness, verbose)
+function [thick_ground_truth, undersampled_noised_gradient_map] = simulate(im_size, blur, thickness, undersampling, verbose)
     addpath('util/')
-
-%     im = zeros(256, 192, 203);
-%     im_size = size(im(:,:,1));
-    im_size = [192 128];
 
     % Define spline
     [pts, spline_f] = gen_spline_realistic(im_size, 100);
@@ -39,11 +35,15 @@ function [thick_ground_truth, undersampled_noised_gradient_map] = simulate(blur,
 
     % K-space artefacts
     k_space = itok(noised_gradient_map);
-    U = sampling_VD(flip(size(k_space)), 3)';
+    U = sampling_VD(flip(size(k_space)), undersampling)';
     undersampled_noised_gradient_map = abs(ktoi(U .* k_space));
 
     % Ground-truth line thickness
-    thick_ground_truth = conv2(ground_truth, ones(thickness), "same")>0;
+    thick_ground_truth = double(conv2(ground_truth, ones(thickness), "same"));
+    
+    % Max activation should be 1
+    thick_ground_truth = thick_ground_truth / max(max(thick_ground_truth));
+    undersampled_noised_gradient_map = undersampled_noised_gradient_map / max(max(undersampled_noised_gradient_map));
 
     if verbose
        % Show result of filtering + noise
