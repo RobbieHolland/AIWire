@@ -13,7 +13,7 @@ function [thick_ground_truth, undersampled_noised_gradient_map] = simulate(im_si
 addpath('util/')
 
 % Define spline
-[pts, spline_f] = gen_spline_realistic(im_size, 100);
+[pts, spline_f] = gen_spline_realistic(im_size, 100, 0.75);
 if verbose
    figure
    fnplt(spline_f) 
