@@ -6,7 +6,7 @@ dataset_y = zeros([N, im_size]);
 
 sprintf('Generating the dataset...')
 parfor i = 1:N
-    [gt, im] = simulate([128 64], 1.3, 1, 1.5, 0);
+    [gt, im] = simulate([128 64], 1.3, 1, 1.5, 10, 0.2, 0);
 
     dataset_X(i, :, :) = im;
     dataset_y(i, :, :) = gt;
