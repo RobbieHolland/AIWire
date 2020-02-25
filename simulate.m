@@ -7,8 +7,8 @@ function [thick_ground_truth, undersampled_noised_gradient_map] = simulate(im_si
 %   undersampling:          Degree of k-space undersampling
 %   undersampling_spread:   Spread of acquired lines in k-space about
 %                           center (k_x, k_y = 0)
-%   verbose:                Debug mode
 %   tip_current:            Fraction of current in tip compared to middle of wire
+%   verbose:                Debug mode
 
 addpath('util/')
 
@@ -35,6 +35,9 @@ z_grads = z_grads .* standing_wave;
 ground_truth = drawFunc(zeros(im_size), pts(2,:), pts(3,:), ones(size(pts(1,:))));
 gradient_map = drawFunc(zeros(im_size), pts(2,:), pts(3,:), z_grads);
 
+% Add anatomy / obscuring uncorrelated irrelevant objects that give signal
+gradient_map_anatomy = add_anatomy(gradient_map);
+
 % Apply 1/r filter
 filter_dim = 250;
 center = [filter_dim/2, filter_dim/2];
@@ -43,7 +46,7 @@ filter_r = sqrt((1 ./ ((row_index - center(1)).^2 + (col_index - center(2)).^2))
 filter_r(center(1), center(2)) = 1;
 filter_r = filter_r / sum(filter_r, 'all');
 
-gradient_map_conved = conv2(gradient_map, filter_r, 'same');
+gradient_map_conved = conv2(gradient_map_anatomy, filter_r, 'same');
 
 % Add complex noise
 sigma = 0.003;
@@ -66,19 +69,22 @@ undersampled_noised_gradient_map = undersampled_noised_gradient_map / max(max(un
 if verbose
    % Show result of filtering + noise
     figure
-    subplot(1,5,1)
+    subplot(1,6,1)
     imshow(ground_truth, [])
     title({'Wire spline', '(ground truth)'})
-    subplot(1,5,2)
+    subplot(1,6,2)
     imshow(gradient_map, [])
     title({'Gradient (z component)', '& standing wave'})
-    subplot(1,5,3)
+    subplot(1,6,3)
+    imshow(gradient_map_anatomy, [])
+    title({'Anatomy'})
+    subplot(1,6,4)
     imshow(gradient_map_conved,[])
     title('Convolved with 1/r')
-    subplot(1,5,4)
+    subplot(1,6,5)
     imshow(noised_gradient_map,[])
     title('Complex gaussian noise') 
-    subplot(1,5,5)
+    subplot(1,6,6)
     imshow(undersampled_noised_gradient_map,[])
     title({'Undersampling', '(training data)'}) 
 end
