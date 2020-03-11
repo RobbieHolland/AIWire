@@ -1,4 +1,4 @@
-function [thick_ground_truth, undersampled_noised_gradient_map] = simulate(im_size, blur, thickness, ...
+function [thick_ground_truth, undersampled_noised_gradient_map] = simulate(pts, im_size, blur, thickness, ...
     undersampling, undersampling_spread, tip_current, verbose)
 % simulate Simulate MRI acquisition of randomised catheter
 %   im_size:                Size of output image
@@ -12,12 +12,6 @@ function [thick_ground_truth, undersampled_noised_gradient_map] = simulate(im_si
 
 addpath('util/')
 
-% Define spline
-[pts, spline_f] = gen_spline_realistic(im_size, 100, 0.75);
-if verbose
-   figure
-   fnplt(spline_f) 
-end
 grads = gradient(pts);
 
 % Normalise gradient vectors

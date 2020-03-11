@@ -7,8 +7,13 @@ rng(1234)
 im = zeros(128, 16, 203);
 
 %% Simulate data
+addpath('util/')
+
 im_size = size(im(:,:,1));
-[ground_truth, simulated] = simulate([128 64], 1.3, 1, 1, 10, 0.2, 1);
+[pts, spline_f] = gen_spline_realistic([128 64], 100, 0.75);
+
+[ground_truth, simulated] = simulate(pts, [128 64], 3, 1, 1, 10, 0.2, 0);
+imshow(simulated,[])
 
 %% Plot many examples
 figure
