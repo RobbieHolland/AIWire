@@ -30,8 +30,8 @@ ground_truth = drawFunc(zeros(im_size), pts(2,:), pts(3,:), ones(size(pts(1,:)))
 gradient_map = drawFunc(zeros(im_size), pts(2,:), pts(3,:), z_grads);
 
 % Add anatomy / obscuring uncorrelated irrelevant objects that give signal
-gradient_map_anatomy = add_anatomy(gradient_map);
-
+%gradient_map_anatomy = add_anatomy(gradient_map);
+gradient_map_anatomy = gradient_map;
 % Apply 1/r filter
 filter_dim = 250;
 center = [filter_dim/2, filter_dim/2];
@@ -50,6 +50,7 @@ noised_gradient_map = abs(gradient_map_conved + complex_guassian);
 % K-space artefacts
 k_space = itok(noised_gradient_map);
 U_dim = flip(size(k_space));
+undersampling_spread
 U = sampling_VD(U_dim, undersampling, U_dim(2)/undersampling_spread)';
 undersampled_noised_gradient_map = abs(ktoi(U .* k_space));
 

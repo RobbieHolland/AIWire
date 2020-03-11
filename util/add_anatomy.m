@@ -23,7 +23,7 @@ function [corrupted_image] = add_anatomy(image, im_size)%128, 64
     blurryRight = imfilter(rightthird, hr);
     corrupted_image(:, 1:17) = blurryLeft(:, 1:17);
     corrupted_image(:, 42:im_size(2)) = blurryRight;
-    imshow(corrupted_image)
+    %imshow(corrupted_image)
 
     close %close imshow
     
