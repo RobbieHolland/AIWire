@@ -10,8 +10,6 @@ function [thick_ground_truth, undersampled_noised_gradient_map] = simulate(pts, 
 %   tip_current:            Fraction of current in tip compared to middle of wire
 %   verbose:                Debug mode
 
-addpath('util/')
-
 grads = gradient(pts);
 
 % Normalise gradient vectors
@@ -50,7 +48,6 @@ noised_gradient_map = abs(gradient_map_conved + complex_guassian);
 % K-space artefacts
 k_space = itok(noised_gradient_map);
 U_dim = flip(size(k_space));
-undersampling_spread
 U = sampling_VD(U_dim, undersampling, U_dim(2)/undersampling_spread)';
 undersampled_noised_gradient_map = abs(ktoi(U .* k_space));
 

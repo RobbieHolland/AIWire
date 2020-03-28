@@ -2,8 +2,7 @@ function [corrupted_image] = add_anatomy(image, im_size, opacity)%128, 64
 if nargin == 2   % if the number of inputs equals 2
     opacity = 1; % then make the third value, z, equal to my default value, 5.
 end
-% Add anatomy to image here
-imshow(image)
+
 %Create coils on top of figure
 right = annotation('ellipse',...
     [0.526490196078432 0.532455315145813 0.0623986928104575 0.230479774223893],...
@@ -29,10 +28,5 @@ blurryLeft = imfilter(leftthird, hl);
 blurryRight = imfilter(rightthird, hr);
 corrupted_image(40:105,1:ceil(im_size(2)/3)) = blurryLeft;
 corrupted_image(22:105,35: im_size(2)) = blurryRight;
-%imshow(corrupted_image)
-
-close %close imshow
-
-
 
 end
