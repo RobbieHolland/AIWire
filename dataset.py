@@ -1,7 +1,6 @@
 import torch
 import torchvision
 from torch.utils.data import Dataset, DataLoader
-from sklearn.model_selection import train_test_split
 import numpy as np
 
 # implement Simulation of Dataset
@@ -21,12 +20,10 @@ class SimDataset(Dataset):
 
         return [image, mask]
 
-def gen_dataloaders(X, y, batch_size, test_prop):
+def gen_dataloaders(X_train, X_test, y_train, y_test, batch_size):
     trans = torchvision.transforms.Compose([
         torchvision.transforms.ToTensor(),
     ])
-
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_prop)
 
     # Create a train set and a validation set, each with input images (simulation data) and target masks (ground truth data)
     train_set = SimDataset(X_train, y_train, transform = trans)
