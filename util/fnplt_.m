@@ -1,5 +1,5 @@
 function [points,t] = fnplt_(f,varargin) 
-npoints = 1000;
+npoints = 100;
 %FNPLT Plot a function. 
 % 
 %   FNPLT(F)  plots the function in F on its basic interval. 

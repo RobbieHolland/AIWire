@@ -12,7 +12,9 @@ addpath('util/')
 im_size = size(im(:,:,1));
 [pts, spline_f] = gen_spline_realistic([128 64], 100, 0.75);
 
-[ground_truth, simulated] = simulate(pts, [128 64], 3, 1, 1, 10, 0.2, 0);
+[ground_truth, simulated] = simulate(pts, [128 64], 1.3, 4, 1.3, 10, 0.2, 1, 0);
+imshow(ground_truth,[])
+figure;
 imshow(simulated,[])
 
 %% Plot many examples
@@ -22,12 +24,15 @@ n = 10;
 test = [];
 train = [];
 
+tic
 for i = 1:n
-    [ground_truth, noised_gradient_map] = simulate([128 64], 1.3, 1, 1.5, 10, 0, 0);
+    [pts, spline_f] = gen_spline_realistic([128 64], 100, 0.75);
+    [ground_truth, noised_gradient_map] = simulate(pts, [128 64], 1.3, 4, 1.3, 10, 0, 1, 0);
     
     test = horzcat(test, ground_truth);
     train = horzcat(train, noised_gradient_map);
 end
+toc
 
 subplot(2,1,1)
 imshow(test, [])

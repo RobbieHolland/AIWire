@@ -1,5 +1,5 @@
-function [thick_ground_truth, undersampled_noised_gradient_map] = simulate(pts, im_size, blur, thickness, ...
-    undersampling, undersampling_spread, tip_current, verbose)
+function [ground_truth, undersampled_noised_gradient_map] = simulate(pts, im_size, blur, thickness, ...
+    undersampling, undersampling_spread, tip_current, length_regression, verbose)
 % simulate Simulate MRI acquisition of randomised catheter
 %   im_size:                Size of output image
 %   blur:                   Spread of signal around wire i.e. (1/r)^blur
@@ -23,8 +23,19 @@ x = linspace(0, pi, size(pts, 2));
 standing_wave = (tip_current + sin(x)) / (1 + tip_current);
 z_grads = z_grads .* standing_wave;
 
+% Length regression
+if length_regression
+    gt_vals = 0.3 + 0.7 * (x / max(x));
+else
+    gt_vals = ones(size(pts(1,:)));
+end
+
 % Plot onto 2D image
-ground_truth = drawFunc(zeros(im_size), pts(2,:), pts(3,:), ones(size(pts(1,:))));
+if thickness == 1
+    ground_truth = drawFunc(zeros(im_size), pts(2,:), pts(3,:), gt_vals);
+else
+    ground_truth = drawFuncRadius(zeros(im_size), pts(2,:), pts(3,:), gt_vals, thickness / 2);
+end
 gradient_map = drawFunc(zeros(im_size), pts(2,:), pts(3,:), z_grads);
 
 % Add anatomy / obscuring uncorrelated irrelevant objects that give signal
@@ -41,7 +52,7 @@ filter_r = filter_r / sum(filter_r, 'all');
 gradient_map_conved = conv2(gradient_map_anatomy, filter_r, 'same');
 
 % Add complex noise
-sigma = 0.003;
+sigma = 0.001;
 complex_guassian = normrnd(0, sigma, im_size) + 1i * normrnd(0, sigma, im_size);
 noised_gradient_map = abs(gradient_map_conved + complex_guassian);
 
@@ -52,10 +63,10 @@ U = sampling_VD(U_dim, undersampling, U_dim(2)/undersampling_spread)';
 undersampled_noised_gradient_map = abs(ktoi(U .* k_space));
 
 % Ground-truth line thickness
-thick_ground_truth = double(conv2(ground_truth, ones(thickness), "same"));
+% thick_ground_truth = double(conv2(ground_truth, ones(thickness), "same"));
 
 % Max activation should be 1
-thick_ground_truth = thick_ground_truth / max(max(thick_ground_truth));
+ground_truth = ground_truth / max(max(ground_truth));
 undersampled_noised_gradient_map = undersampled_noised_gradient_map / max(max(undersampled_noised_gradient_map));
 
 if verbose
