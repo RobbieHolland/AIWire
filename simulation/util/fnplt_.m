@@ -1,5 +1,4 @@
-function [points,t] = fnplt_(f,varargin) 
-npoints = 100;
+function [points,t] = fnplt_(f, npoints, varargin) 
 %FNPLT Plot a function. 
 % 
 %   FNPLT(F)  plots the function in F on its basic interval. 
@@ -40,8 +39,9 @@ npoints = 100;
  
 % interpret the input: 
 symbol=''; interv=[]; linewidth=[]; jumps=0; 
-for j=2:nargin 
-   arg = varargin{j-1}; 
+
+for j=3:nargin 
+   arg = varargin{j-2};
    if ~isempty(arg) 
       if ischar(arg) 
          if arg(1)=='j', jumps = 1; 

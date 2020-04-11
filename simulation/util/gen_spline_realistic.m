@@ -25,7 +25,7 @@ function [pts, spline_f] = gen_spline_realistic(im_size, depth, loop_prob)
     
     % Generate 'continuous' spline
     spline_f = cscvn(xzy);
-    pts = fnplt_(spline_f,'r',2);
+    pts = fnplt_(spline_f,500,'r',2);
 end
 
 function [line] = wobbly_line(sz, deviation)

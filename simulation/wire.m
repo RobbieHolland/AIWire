@@ -1,6 +1,6 @@
 %% Load image (to determine dimensions)
-addpath('/Users/Robert/Documents/Kings/Group Project/AIWire/exportfig')
-
+addpath('./exportfig/')
+pwd
 rng(1234)
 %im = load('../HASTE_GW_SAG_TR1200_S80_0012/HASTE_GW_SAG_TR1200_S80_0012.mat');
 %im = im.imageDicom.image;
@@ -12,7 +12,7 @@ addpath('util/')
 im_size = size(im(:,:,1));
 [pts, spline_f] = gen_spline_realistic([128 64], 100, 0.75);
 
-[ground_truth, simulated] = simulate(pts, [128 64], 1.3, 4, 1.3, 10, 0.2, 1, 0);
+[ground_truth, simulated] = simulate(pts, [128 64], 1.3, 1, 1.3, 10, 0.2, 0, 0);
 imshow(ground_truth,[])
 figure;
 imshow(simulated,[])
@@ -27,7 +27,7 @@ train = [];
 tic
 for i = 1:n
     [pts, spline_f] = gen_spline_realistic([128 64], 100, 0.75);
-    [ground_truth, noised_gradient_map] = simulate(pts, [128 64], 1.3, 4, 1.3, 10, 0, 1, 0);
+    [ground_truth, noised_gradient_map] = simulate(pts, [128 64], 1.3, 1, 1.3, 10, 0, 0, 0);
     
     test = horzcat(test, ground_truth);
     train = horzcat(train, noised_gradient_map);
