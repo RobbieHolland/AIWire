@@ -9,7 +9,7 @@ from PIL import Image
 # It fills in gaps and broken lines by dilating and eroding the image.
 # It saves the output skeleton as a .png file
 
-def preAmbrosini(image):
+def preAmbrosini(image,filename):
     #dilate and erode
     kernel_di = np.ones((5,3), np.uint8)
     dilate_im = cv2.dilate(image, kernel_di, iterations=1)
@@ -24,7 +24,7 @@ def preAmbrosini(image):
 
     #save image without white frame, labels and else
     binary = Image.fromarray(skeleton)
-    filename = uuid.uuid4().hex
+    #filename = uuid.uuid4().hex
     format = ".png"
     binary = binary.save(filename+format)
 
