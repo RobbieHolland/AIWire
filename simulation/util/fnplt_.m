@@ -69,7 +69,7 @@ if ~isempty(interv), f = ppbrk(f,interv); end
 [breaks,coefs,l,k,d] = ppbrk(f); 
 
 % we are dealing with a univariate spline 
-x = [breaks(2:l) linspace(breaks(1),breaks(l+1),npoints)]; 
+x = [breaks(2:l) linspace(breaks(1),breaks(l+1),npoints - 2 * size(breaks(2:l), 2))]; 
 v = ppual(f,x);  
 
 if l>1 % make sure of proper treatment at jumps if so required 

@@ -26,7 +26,7 @@ train = [];
 
 tic
 for i = 1:n
-    [pts, spline_f] = gen_spline_realistic([128 64], 100, 0.75);
+    [pts, spline_f] = gen_spline_realistic([128 64], 100, 0.75, 500);
     [ground_truth, noised_gradient_map] = simulate(pts, [128 64], 1.3, 1, 1.3, 10, 0, 0, 0);
     
     test = horzcat(test, ground_truth);
