@@ -59,7 +59,7 @@ class SegNet(nn.Module):
             nn.Conv2d(2, num_class, 3, 1, 1),
         )
 
-        )
+        
 
 
     def forward(self, x):
