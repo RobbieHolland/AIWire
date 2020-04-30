@@ -40,3 +40,10 @@ def hausdorff_distance(set1, set2, max_ahd=np.inf):
     max_ = max(directed[0].max(), directed[1].max())
 
     return {'average': avg_, 'maximum': max_}
+
+def MSE(segmentation, ground_truth_segmentation):
+    return np.square(segmentation - ground_truth_segmentation).reshape(segmentation.shape[0], -1).mean(axis = 1)
+
+def tip_distance(pts_a,pts_b):
+    dist = np.sqrt((pts_b[len(pts_b)-1,0] - pts_a[len(pts_a)-1,0])**2 + (pts_b[len(pts_b)-1,1] - pts_a[len(pts_a)-1,1])**2)
+    return dist
