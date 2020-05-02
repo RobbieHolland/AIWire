@@ -1,4 +1,4 @@
-function [ground_truth, undersampled_noised_gradient_map] = simulate(pts, im_size, blur, thickness, ...
+function [ground_truth, undersampled_noised_gradient_map] = simulate(pts, im_size, blur_filter, thickness, ...
     undersampling, undersampling_spread, tip_current, length_regression, verbose)
 % simulate Simulate MRI acquisition of randomised catheter
 %   im_size:                Size of output image
@@ -42,28 +42,18 @@ gradient_map = drawFunc(zeros(im_size), pts(2,:), pts(3,:), z_grads);
 %gradient_map_anatomy = add_anatomy(gradient_map);
 gradient_map_anatomy = gradient_map;
 % Apply 1/r filter
-filter_dim = 250;
-center = [filter_dim/2, filter_dim/2];
-[col_index, row_index] = ndgrid(1:filter_dim, 1:filter_dim);
-filter_r = sqrt((1 ./ ((row_index - center(1)).^2 + (col_index - center(2)).^2)).^blur);
-filter_r(center(1), center(2)) = 1;
-filter_r = filter_r / sum(filter_r, 'all');
-
-gradient_map_conved = conv2(gradient_map_anatomy, filter_r, 'same');
+gradient_map_conved = conv2(gradient_map_anatomy, blur_filter, 'same');
 
 % Add complex noise
 sigma = 0.001;
 complex_guassian = normrnd(0, sigma, im_size) + 1i * normrnd(0, sigma, im_size);
-noised_gradient_map = abs(gradient_map_conved + complex_guassian);
+noised_gradient_map = gradient_map_conved + abs(complex_guassian);
 
 % K-space artefacts
 k_space = itok(noised_gradient_map);
 U_dim = flip(size(k_space));
 U = sampling_VD(U_dim, undersampling, U_dim(2)/undersampling_spread)';
 undersampled_noised_gradient_map = abs(ktoi(U .* k_space));
-
-% Ground-truth line thickness
-% thick_ground_truth = double(conv2(ground_truth, ones(thickness), "same"));
 
 % Max activation should be 1
 ground_truth = ground_truth / max(max(ground_truth));
