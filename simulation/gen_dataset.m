@@ -15,10 +15,12 @@ spline_pts = zeros([N, n_spline_samples, 2]);
 
 addpath('util/')
 sprintf('Generating the dataset...')
+blur_filter = gen_blur_filter(250, 1.3);
+
 parfor i = 1:N
     [pts, spline_f] = gen_spline_realistic(im_size, 100, 0.75);
-    [gt, im] = simulate(pts, im_size, 1.3, 1, 1.3, 10, 0, 1, 0);
-
+    [gt, im] = simulate(pts, im_size, blur_filter, 1, 1.3, 10, 0.2, 0, 0);
+    
     dataset_X(i, :, :) = im;
     dataset_y(i, :, :) = gt;
     spline_pts(i, :, :) = [pts(2,:); pts(3,:)]'

@@ -9,25 +9,31 @@ im = zeros(128, 16, 203);
 %% Simulate data
 addpath('util/')
 
-im_size = size(im(:,:,1));
-[pts, spline_f] = gen_spline_realistic([128 64], 100, 0.75);
+im_size = [256 192];
+[pts, spline_f] = gen_spline_realistic(im_size, 100, 0.75);
+blur_filter = gen_blur_filter(250, 1.3);
+[ground_truth, simulated] = simulate(pts, im_size, blur_filter, 1, 1.3, 10, 0.2, 0, 0);
 
-[ground_truth, simulated] = simulate(pts, [128 64], 1.3, 1, 1.3, 10, 0.2, 0, 0);
+figure;
 imshow(ground_truth,[])
 figure;
 imshow(simulated,[])
 
+% save_figure('example')
+
 %% Plot many examples
 figure
 n = 10;
+im_size = [512 256];
 
 test = [];
 train = [];
 
 tic
+blur_filter = gen_blur_filter(250, 1.3);
 for i = 1:n
-    [pts, spline_f] = gen_spline_realistic([128 64], 100, 0.75, 500);
-    [ground_truth, noised_gradient_map] = simulate(pts, [128 64], 1.3, 1, 1.3, 10, 0, 0, 0);
+    [pts, spline_f] = gen_spline_realistic(im_size, 100, 0.75, 500);
+    [ground_truth, noised_gradient_map] = simulate(pts, im_size, blur_filter, 1, 1.3, 10, 0, 0, 0);
     
     test = horzcat(test, ground_truth);
     train = horzcat(train, noised_gradient_map);

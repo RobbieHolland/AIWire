@@ -22,7 +22,7 @@ function [pts, spline_f] = gen_spline_realistic(im_size, depth, loop_prob, n_sam
         f2 = xzy(:,ab(1):ab(2));
         f3 = xzy(:,ab(2):end);
         loop = fliplr(f2);
-        loop(3,:) = loop(3,1) + wobbly_line([size(loop, 2), 1], deviation / 2) + loop_width;
+        loop(3,:) = loop(3,1) + wobbly_line([size(loop, 2), 1], floor(deviation / 2)) + loop_width;
 
         xzy = [f1, f2, loop, f3];
     end
