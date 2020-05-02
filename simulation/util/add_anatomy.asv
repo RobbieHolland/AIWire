@@ -26,5 +26,19 @@ for i = 1:im_size(1)
 end
 deformed = deform_ellipses(corrupted_image);
 %new = imgaussfilt(deformed, 1,'FilterSize',7);  
-corrupted_image = deformed+image;            
+corrupted_image = deformed+image;
+            
+
+% blur side patches
+% leftthird = corrupted_image(40:105,1:ceil(im_size(2)/3));
+% rightthird = corrupted_image(22:105,35: im_size(2));
+% %     hl = fspecial('motion', 10,10);
+% %     hr = fspecial('motion', 20,20);
+% hr = fspecial('gaussian',10, 25);
+% hl = fspecial('gaussian',10, 20);
+% blurryLeft = imfilter(leftthird, hl);
+% blurryRight = imfilter(rightthird, hr);
+% corrupted_image(40:105,1:ceil(im_size(2)/3)) = blurryLeft;
+% corrupted_image(22:105,35: im_size(2)) = blurryRight;
+
 end
