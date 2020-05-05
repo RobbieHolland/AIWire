@@ -8,7 +8,7 @@
 tic
 N = 2000;
 n_spline_samples = 500;
-im_size = [128 64];
+im_size = [256 192];
 dataset_X = zeros([N, im_size]);
 dataset_y = zeros([N, im_size]);
 spline_pts = zeros([N, n_spline_samples, 2]);
@@ -19,7 +19,8 @@ blur_filter = gen_blur_filter(250, 1.3);
 
 parfor i = 1:N
     [pts, spline_f] = gen_spline_realistic(im_size, 100, 0.75);
-    [gt, im] = simulate(pts, im_size, blur_filter, 1, 1.3, 10, 0.2, 0, 0);
+    [gt, im] = simulate(pts, im_size, blur_filter,1,0,0,...
+    [0.0 0.3]);
     
     dataset_X(i, :, :) = im;
     dataset_y(i, :, :) = gt;
