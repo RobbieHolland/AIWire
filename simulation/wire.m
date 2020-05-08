@@ -12,8 +12,14 @@ addpath('util/')
 im_size = [256 192];
 [pts, spline_f] = gen_spline_realistic(im_size, 100, 0.75);
 blur_filter = gen_blur_filter(250, 1.3);
-[ground_truth, simulated] = simulate(pts, im_size, blur_filter, 1, 1.3, 10, 0.2, 0, 0);
+% [ground_truth, simulated] = simulate(pts, im_size, blur_filter, 1, 1.3, 10, 0.2, 0, 0);
 
+% [ground_truth, simulated] = simulate(pts, im_size, blur_filter,1,0,1,...
+%     [0.0 1.0],[0.001 0.005], [1.3, 1.3], [0,10]);
+[ground_truth, simulated] = simulate(pts, im_size, blur_filter,1,0,1,...
+    [0.001 0.5], [0.0 1.0],[1.3, 1.3], [0,10], 1);
+%simulate(pts, im_size, blur_filter, thickness, length_regression,verbose, 
+% sigma, tip_current, undersampling, undersampling_spread, anatomy)
 figure;
 imshow(ground_truth,[])
 figure;
@@ -33,10 +39,12 @@ tic
 blur_filter = gen_blur_filter(250, 1.3);
 for i = 1:n
     [pts, spline_f] = gen_spline_realistic(im_size, 100, 0.75, 500);
-    [ground_truth, noised_gradient_map] = simulate(pts, im_size, blur_filter, 1, 1.3, 10, 0, 0, 0);
+    [ground_truth, simulated] = simulate(pts, im_size, blur_filter,1,0,0,...
+    [0.0 0.3]);
+%     [ground_truth, noised_gradient_map] = simulate(pts, im_size, blur_filter, 1, 1.3, 10, 0, 0, 0);
     
     test = horzcat(test, ground_truth);
-    train = horzcat(train, noised_gradient_map);
+    train = horzcat(train, simulated);
 end
 toc
 
