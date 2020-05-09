@@ -20,7 +20,7 @@ z_grads = (1 + abs(grads(2,:))) / 2;
 
 if exist('tip_current','var')
     tip_current = (tip_current(2)-tip_current(1))*rand(1) + tip_current(1);
-    fprintf('tip current is %f\n', tip_current)
+%     fprintf('tip current is %f\n', tip_current)
     % Current standing wave (i.e. catheter tip looks dimmer)
     x = linspace(0, pi, size(pts, 2));
     standing_wave = (tip_current + sin(x)) / (1 + tip_current);
