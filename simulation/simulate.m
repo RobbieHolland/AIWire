@@ -1,5 +1,5 @@
 function [ground_truth, simulated] = simulate(pts, im_size, blur_filter, thickness, ...
-    length_regression, verbose,sigma, tip_current, undersampling, undersampling_spread,  sizeanatomy,ratio)
+    length_regression, verbose,sigma, tip_current, undersampling, undersampling_spread,  sizeanatomy, ratio)
 % simulate Simulate MRI acquisition of randomised catheter
 %   im_size:                Size of output image
 %   blur:                   Spread of signal around wire i.e. (1/r)^blur
@@ -46,7 +46,8 @@ simulated = gradient_map;
 
 if exist("sizeanatomy", "var") && exist("ratio","var")
     % Add anatomy / obscuring uncorrelated irrelevant objects that give signal
-    ratio = 0.5; sizeanatomy = 1;
+    ratio = (ratio(2)-ratio(1))*rand(1) + ratio(1);
+    sizeanatomy = (sizeanatomy(2)-sizeanatomy(1))*rand(1)+sizeanatomy(1);
     gradient_map_anatomy = add_anatomy(simulated,ratio, sizeanatomy);
     simulated = gradient_map_anatomy;
     %gradient_map_anatomy = gradient_map;   

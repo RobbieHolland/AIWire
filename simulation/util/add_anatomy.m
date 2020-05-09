@@ -13,7 +13,7 @@ corrupted_image = add_ellipses(mask,ratio, sizeanatomy);
 for i = 1:size(mask,1)
     for j= 1:size(mask,2)
         if corrupted_image(i,j) == 1
-            corrupted_image(i,j) = rand;
+            corrupted_image(i,j) = rand*0.5;
         end
     end
 end

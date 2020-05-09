@@ -13,6 +13,6 @@ fdy=alpha*fdy;
 [y x]=ndgrid(1:size(img,1),1:size(img,2)); %get pixel indexes out
 new = griddata(x-fdx,y-fdy,double(img),x,y);
 new(isnan(new))=0;
-imshow(new)
+%imshow(new)
 end
 
