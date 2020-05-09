@@ -1,5 +1,5 @@
 function [ground_truth, simulated] = simulate(pts, im_size, blur_filter, thickness, ...
-    length_regression, verbose,sigma, tip_current, undersampling, undersampling_spread)%,  sizeanatomy,ratio)
+    length_regression, verbose,sigma, tip_current, undersampling, undersampling_spread,  sizeanatomy,ratio)
 % simulate Simulate MRI acquisition of randomised catheter
 %   im_size:                Size of output image
 %   blur:                   Spread of signal around wire i.e. (1/r)^blur
@@ -44,16 +44,17 @@ end
 gradient_map = drawFunc(zeros(im_size), pts(2,:), pts(3,:), z_grads);
 simulated = gradient_map;
 
-if exist("anatomy", "var")
+if exist("sizeanatomy", "var") && exist("ratio","var")
     % Add anatomy / obscuring uncorrelated irrelevant objects that give signal
     ratio = 0.5; sizeanatomy = 1;
-    gradient_map_anatomy = add_anatomy(gradient_map,ratio, sizeanatomy);
+    gradient_map_anatomy = add_anatomy(simulated,ratio, sizeanatomy);
+    simulated = gradient_map_anatomy;
     %gradient_map_anatomy = gradient_map;   
 end
 
 % Apply 1/r filter
 %gradient_map_conved = conv2(gradient_map_anatomy, blur_filter, 'same');
-gradient_map_conved = conv2(gradient_map, blur_filter, 'same');
+gradient_map_conved = conv2(simulated, blur_filter, 'same');
 simulated = gradient_map_conved;
 simulated = simulated / max(max(simulated));
 % 
@@ -102,7 +103,7 @@ if verbose
     imshow(gradient_map, [])
     title({'Gradient (z component)', '& standing wave'})
     
-    if exist("anatomy", "var")
+    if exist("sizeanatomy", "var") && exist("ratio","var")
     subplot(1,6,3)
     imshow(gradient_map_anatomy, [])
     title({'Anatomy'})
