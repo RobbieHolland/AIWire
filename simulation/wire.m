@@ -17,7 +17,7 @@ blur_filter = gen_blur_filter(250, 1.3);
 % [ground_truth, simulated] = simulate(pts, im_size, blur_filter,1,0,1,...
 %     [0.0 1.0],[0.001 0.005], [1.3, 1.3], [0,10]);
 [ground_truth, simulated] = simulate(pts, im_size, blur_filter,1,0,1,...
-    [0.001 0.5], [0.0 1.0],[1.3, 1.3], [0,10], 1);
+    [0.001 0.5], [0.0 1.0],[1.3, 1.3], [0,10], 1, 1);
 %simulate(pts, im_size, blur_filter, thickness, length_regression,verbose, 
 % sigma, tip_current, undersampling, undersampling_spread, anatomy)
 figure;
