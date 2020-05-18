@@ -7,6 +7,7 @@ import os
 import wireskeletonise 
 import subprocess 
 import numpy as np
+from get_biggest_spline import * 
 
 def PtsListFromFile(_fileName):
     ptsList = []
@@ -34,7 +35,10 @@ def get_centerline(img,directory,name):
     result = subprocess.call(['sh','./extract_centerline.sh'])
     pt_list = PtsListFromFile(file_dir + name + '.txt')
     pts = np.array(pt_list)
+    # Apply get biggest spline to points 
+    # pts = get_biggest_spline(pts)
     centerline = np.zeros_like(img)
+
     for ww in range(len(pts)):
         if int(pts[ww,1]) < centerline.shape[0] and int(pts[ww,0])< centerline.shape[1]:
             centerline[int(pts[ww,1]),int(pts[ww,0])] = 1

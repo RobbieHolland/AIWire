@@ -15,4 +15,4 @@ def load_data(dataset_path, dataset_name, v73=False):
     y = data['dataset'][1]
     spline_pts = data['spline_pts']
 
-    return X, y
+    return X, y, spline_pts

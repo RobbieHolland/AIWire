@@ -39,7 +39,7 @@ def hausdorff_distance(set1, set2, max_ahd=np.inf):
     avg_ = (directed[0].mean() + directed[1].mean()) / 2.0
     max_ = max(directed[0].max(), directed[1].max())
 
-    return {'average': avg_, 'maximum': max_}
+    return avg_, max_
 
 def MSE(segmentation, ground_truth_segmentation):
     return np.square(segmentation - ground_truth_segmentation).reshape(segmentation.shape[0], -1).mean(axis = 1)
