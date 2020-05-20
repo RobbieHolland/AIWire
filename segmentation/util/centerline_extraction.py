@@ -26,7 +26,7 @@ def PtsListFromFile(_fileName):
     return ptsList
     img = img.astype(np.float32)
 
-def get_centerline(img,directory,name): 
+def get_centerline(img,directory,name,pre_process=1): 
     img = img.astype(np.float32)
     os.chdir("../")
     file_dir = os.getcwd() + '/extract_centerline/example/'

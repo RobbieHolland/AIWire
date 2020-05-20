@@ -20,7 +20,7 @@ blur_filter = gen_blur_filter(250, 1.3);
 
 parfor i = 1:N
     [pts, spline_f] = gen_spline_realistic(im_size, 100, 0.75);
-    [gt, im] = simulate(pts, im_size, blur_filter,1,0,0,...
+    [gt, im] = simulate(pts, im_size, blur_filter,1,0,1,...
     [0.0 0.3], [0.0 1.0], [0.7 2.0], [6 20], [0 1], [0.6 1.0]);
     
     dataset_X(i, :, :) = im;

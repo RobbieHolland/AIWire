@@ -11,7 +11,6 @@ function [ground_truth, simulated] = simulate(pts, im_size, blur_filter, thickne
 %   verbose:                Debug mode
 
 grads = gradient(pts);
-
 % Normalise gradient vectors
 for i = 1:size(grads, 2)
     grads(:,i) = grads(:,i) / sqrt(sum(grads(:,i).^2));
@@ -69,8 +68,6 @@ if exist('sigma','var')
     simulated = noised_gradient_map;
 end
 
-
-
 % K-space artefacts
 if exist('undersampling','var') && exist('undersampling_spread', 'var')
     undersampling = (undersampling(2)-undersampling(1))*rand(1) + undersampling(1);
@@ -80,18 +77,15 @@ if exist('undersampling','var') && exist('undersampling_spread', 'var')
     
     k_space = itok(noised_gradient_map);
     U_dim = flip(size(k_space));
-    U = sampling_VD(U_dim, undersampling, U_dim(2)/undersampling_spread)';
+    U = sampling_VD(U_dim, undersampling, undersampling_spread)';
     simulated = abs(ktoi(U .* k_space));
-    
-        
+   
 end
 
 % Max activation should be 1
 ground_truth = ground_truth / max(max(ground_truth));
 % simulated = simulated / max(max(simulated));
 % simulated  = (simulated  - mean(simulated))./std(simulated);
-
-
 
 if verbose
 
