@@ -8,6 +8,7 @@ im = zeros(128, 16, 203);
 
 %% Simulate data
 addpath('util/')
+rng(1234)
 
 im_size = [256 192];
 [pts, spline_f] = gen_spline_realistic(im_size, 100, 0.75);
@@ -17,7 +18,7 @@ blur_filter = gen_blur_filter(250, 1.3);
 % [ground_truth, simulated] = simulate(pts, im_size, blur_filter,1,0,1,...
 %     [0.0 1.0],[0.001 0.005], [1.3, 1.3], [0,10]);
 [ground_truth, simulated] = simulate(pts, im_size, blur_filter,1,0,1,...
-    [0.001 0.5], [0.0 1.0],[1.3, 1.3], [0,10], 1, 1);
+    [0.1 0.1], [0.2 0.2], [0.6 0.6], [0.8 0.8], [0.4 0.4], [1 1]);
 %simulate(pts, im_size, blur_filter, thickness, length_regression,verbose, 
 % sigma, tip_current, undersampling, undersampling_spread, anatomy)
 figure;
@@ -25,7 +26,7 @@ imshow(ground_truth,[])
 figure;
 imshow(simulated,[])
 
-% save_figure('example')
+save_figure('example')
 
 %% Plot many examples
 figure
