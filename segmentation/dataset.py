@@ -5,42 +5,44 @@ import numpy as np
 
 # implement Simulation of Dataset
 class SimDataset(Dataset):
-    def __init__(self, _simulated, _ground_truth, transform=None):
-        self.input_images, self.target_masks = np.array(_simulated), np.array(_ground_truth)
-        self.transform = transform
+	def __init__(self, _simulated, _ground_truth, _spline_pts, transform=None):
+		self.input_images, self.target_masks, self.spline_pts = np.array(_simulated), np.array(_ground_truth), np.array(_spline_pts)
+		self.transform = transform
 
-    def __len__(self):
-        return len(self.input_images)
+	def __len__(self):
+		return len(self.input_images)
 
-    def __getitem__(self, idx):
-        image = self.input_images[idx]
-        mask = self.target_masks[idx]
-        if self.transform:
-            image = self.transform(image)
+	def __getitem__(self, idx):
+		image = self.input_images[idx]
+		mask = self.target_masks[idx]
+		pts = self.spline_pts[idx]
 
-        return [image, mask]
+		if self.transform:
+			image = self.transform(image)
 
-def gen_dataloaders(X_train, X_test, y_train, y_test, batch_size):
-    trans = torchvision.transforms.Compose([
-        torchvision.transforms.ToTensor(),
-    ])
+		return [image, mask, pts]
 
-    # Create a train set and a validation set, each with input images (simulation data) and target masks (ground truth data)
-    train_set = SimDataset(X_train, y_train, transform = trans)
-    val_set = SimDataset(X_test, y_test, transform = trans)
+def gen_dataloaders(X_train, X_test, pts_train, y_train, y_test, pts_test, batch_size):
+	trans = torchvision.transforms.Compose([
+		torchvision.transforms.ToTensor(),
+	])
 
-    image_datasets = {
-        'train': train_set, 'val': val_set
-    }
+	# Create a train set and a validation set, each with input images (simulation data) and target masks (ground truth data)
+	train_set = SimDataset(X_train, y_train, pts_train, transform = trans)
+	val_set = SimDataset(X_test, y_test, pts_test, transform = trans)
 
-    dataloaders = {
-        'train': DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=0),
-        'val': DataLoader(val_set, batch_size=batch_size, shuffle=True, num_workers=0)
-    }
+	image_datasets = {
+		'train': train_set, 'val': val_set
+	}
 
-    dataset_sizes = {
-        x: len(image_datasets[x]) for x in image_datasets.keys()
-    }
+	dataloaders = {
+		'train': DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=0),
+		'val': DataLoader(val_set, batch_size=batch_size, shuffle=True, num_workers=0)
+	}
 
-    print(dataset_sizes)
-    return dataloaders
+	dataset_sizes = {
+		x: len(image_datasets[x]) for x in image_datasets.keys()
+	}
+
+	print(dataset_sizes)
+	return dataloaders

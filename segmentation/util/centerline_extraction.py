@@ -30,7 +30,7 @@ def get_centerline(img,directory,name,pre_process=1):
     img = img.astype(np.float32)
     os.chdir("../")
     file_dir = os.getcwd() + '/extract_centerline/example/'
-    wireskeletonise.preAmbrosini(img, file_dir+name)
+    wireskeletonise.preAmbrosini(img, file_dir+name, pre_process)
     os.chdir(file_dir)
     result = subprocess.call(['sh','./extract_centerline.sh'])
     pt_list = PtsListFromFile(file_dir + name + '.txt')
