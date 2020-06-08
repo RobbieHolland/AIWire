@@ -33,8 +33,11 @@ def get_centerline(img,directory,name,pre_process=1):
     wireskeletonise.preAmbrosini(img, file_dir+name, pre_process)
     os.chdir(file_dir)
     result = subprocess.call(['sh','./extract_centerline.sh'])
-    pt_list = PtsListFromFile(file_dir + name + '.txt')
-    pts = np.array(pt_list)
+    if result ==0:
+        pt_list = PtsListFromFile(file_dir + name + '.txt')
+        pts = np.array(pt_list)
+    else:
+        pts = np.array([])
     # Apply get biggest spline to points 
     # pts = get_biggest_spline(pts)
     centerline = np.zeros_like(img)
